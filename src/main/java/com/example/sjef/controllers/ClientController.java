@@ -13,7 +13,7 @@ public class ClientController {
 	
 	@GetMapping
 	public ResponseEntity<Client> findAll(){
-		Client cli = new Client(1L, "Thiago", "Fabris", "thi@gmail.com");
-		return ResponseEntity.ok().body(cli);
+		Client client = new Client(null, "Thiago", "Fabris", "thi@gmail.com");
+		return ResponseEntity.ok().body(client);
 	}
 }
