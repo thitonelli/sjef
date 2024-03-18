@@ -1,12 +1,17 @@
 package com.example.sjef.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +27,10 @@ public class Client implements Serializable {
 	private String lastName;
 	private String email;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
+ 	
 	public Client() {
 		
 	}
@@ -65,6 +74,10 @@ public class Client implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public List<Order> getOrders() {
+		return orders;
+	}
 
 	@Override
 	public int hashCode() {
@@ -84,8 +97,5 @@ public class Client implements Serializable {
 				&& Objects.equals(lastName, other.lastName);
 	}
 
-	
-	
-	
 
 }
