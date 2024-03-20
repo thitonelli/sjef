@@ -12,6 +12,7 @@ import com.example.sjef.entities.Category;
 import com.example.sjef.entities.Client;
 import com.example.sjef.entities.Order;
 import com.example.sjef.entities.OrderItem;
+import com.example.sjef.entities.Payment;
 import com.example.sjef.entities.Product;
 import com.example.sjef.entities.enums.OrderStatus;
 import com.example.sjef.repositories.CategoryRepository;
@@ -46,8 +47,8 @@ public class TestConfig implements CommandLineRunner {
 		
 		clientRepository.saveAll(Arrays.asList(c1, c2));
 		
-		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.SHIPPED, c1);
-		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.CANCELED, c2);
+		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, c1);
+		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, c2);
 		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.DELIVERED, c1);
 		
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
@@ -70,6 +71,10 @@ public class TestConfig implements CommandLineRunner {
 		OrderItem oi3 = new OrderItem(o2, prod3, 2, prod3.getPrice());
 		
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
+		
+		Payment pay1 = new Payment(null, Instant.parse("2019-06-20T20:00:07Z"), o1);
+		o1.setPayment(pay1);
+		orderRepository.save(o1);
 		
 		prod1.getCategories().add(cat1);
 		prod2.getCategories().add(cat2);

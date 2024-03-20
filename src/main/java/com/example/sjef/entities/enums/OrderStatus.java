@@ -4,7 +4,9 @@ public enum OrderStatus {
 
 	SHIPPED(1),
 	DELIVERED(2),
-	CANCELED(3);
+	CANCELED(3),
+	WAITING_PAYMENT(4),
+	PAID(5);
 
 	private int code;
 
