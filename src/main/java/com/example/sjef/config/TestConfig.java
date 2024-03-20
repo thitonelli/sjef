@@ -11,10 +11,12 @@ import org.springframework.context.annotation.Profile;
 import com.example.sjef.entities.Category;
 import com.example.sjef.entities.Client;
 import com.example.sjef.entities.Order;
+import com.example.sjef.entities.OrderItem;
 import com.example.sjef.entities.Product;
 import com.example.sjef.entities.enums.OrderStatus;
 import com.example.sjef.repositories.CategoryRepository;
 import com.example.sjef.repositories.ClientRepository;
+import com.example.sjef.repositories.OrderItemRepository;
 import com.example.sjef.repositories.OrderRepository;
 import com.example.sjef.repositories.ProductRepository;
 
@@ -33,6 +35,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -47,6 +52,7 @@ public class TestConfig implements CommandLineRunner {
 		
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 		
+		
 		Category cat1 = new Category(null, "Electronics");
 		Category cat2 = new Category(null, "Books");
 		Category cat3 = new Category(null, "Computers");
@@ -58,6 +64,12 @@ public class TestConfig implements CommandLineRunner {
 		Product prod3 = new Product(null, "Notebook", 2000.00);
 		
 		productRepository.saveAll(Arrays.asList(prod1, prod2, prod3));
+		
+		OrderItem oi1 = new OrderItem(o1, prod1, 2, prod1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, prod3, 1, prod3.getPrice());
+		OrderItem oi3 = new OrderItem(o2, prod3, 2, prod3.getPrice());
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
 		
 		prod1.getCategories().add(cat1);
 		prod2.getCategories().add(cat2);
