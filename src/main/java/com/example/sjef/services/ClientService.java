@@ -29,8 +29,8 @@ public class ClientService {
 		return client.get();
 	}
 	
-	public Client insert(Client obj) {
-		return clientRepository.save(obj);
+	public Client insert(Client client) {
+		return clientRepository.save(client);
 	}
 	
 	public void delete(Long id) {
@@ -43,12 +43,9 @@ public class ClientService {
 		return clientRepository.save(newClient);
 	}
 
-	private void updateData(Client entity, Client obj) {
-		entity.setFirstName(obj.getFirstName());
-		entity.setEmail(obj.getEmail());
+	private void updateData(Client newClient, Client client) {
+		newClient.setFirstName(client.getFirstName());
+		newClient.setLastName(client.getLastName());
+		newClient.setEmail(client.getEmail());
 	}
-	
-	
-	
-	
 }
