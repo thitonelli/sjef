@@ -4,11 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.example.sjef.entities.Client;
 import com.example.sjef.entities.dto.ClientDTO;
 import com.example.sjef.repositories.ClientRepository;
+import com.example.sjef.services.exceptions.DatabaseException;
+import com.example.sjef.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ClientService {
@@ -26,7 +32,7 @@ public class ClientService {
 
 	public Client findById(Long id) {
 		Optional<Client> client = clientRepository.findById(id);
-		return client.get();
+		return client.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public Client insert(Client client) {
@@ -34,13 +40,23 @@ public class ClientService {
 	}
 	
 	public void delete(Long id) {
-		clientRepository.deleteById(id);
+		try {
+			clientRepository.deleteById(id);
+		}catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 	
 	public Client update(Client client) {
-		Client newClient = findById(client.getId());
-		updateData(newClient, client);
-		return clientRepository.save(newClient);
+		try {
+			Client newClient = findById(client.getId());
+			updateData(newClient, client);
+			return clientRepository.save(newClient);
+		}catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(client.getId());
+		}
 	}
 
 	private void updateData(Client newClient, Client client) {

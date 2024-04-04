@@ -20,49 +20,46 @@ import com.example.sjef.entities.Client;
 import com.example.sjef.entities.dto.ClientDTO;
 import com.example.sjef.services.ClientService;
 
-
-
 @RestController
-@RequestMapping(value="/clients")
+@RequestMapping(value = "/clients")
 public class ClientController {
-	
+
 	@Autowired
 	private ClientService clientService;
-	
+
 	@GetMapping
-	public ResponseEntity<List<ClientDTO>> findAll(){
-		List<Client> list = clientService.findAll(); 
+	public ResponseEntity<List<ClientDTO>> findAll() {
+		List<Client> list = clientService.findAll();
 		List<ClientDTO> listDto = list.stream().map(x -> new ClientDTO(x)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
-	
-	@GetMapping(value="/{id}")
-	public ResponseEntity<ClientDTO> findById(@PathVariable Long id){
+
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
 		Client clientDto = clientService.findById(id);
 		return ResponseEntity.ok().body(new ClientDTO(clientDto));
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<Void> insert(@RequestBody ClientDTO clientDTO){
+	public ResponseEntity<Void> insert(@RequestBody ClientDTO clientDTO) {
 		Client client = clientService.fromDTO(clientDTO);
 		client = clientService.insert(client);
-		URI uri =  ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
-	@DeleteMapping(value="/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		clientService.delete(id);
 		return ResponseEntity.noContent().build();
-	}	
-	
-	@PutMapping(value="/{id}")
-	public ResponseEntity<Void> update(@RequestBody ClientDTO clientDTO, @PathVariable Long id){
+	}
+
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Void> update(@RequestBody ClientDTO clientDTO, @PathVariable Long id) {
 		Client client = clientService.fromDTO(clientDTO);
 		client.setId(id);
 		client = clientService.insert(client);
 		return ResponseEntity.noContent().build();
 	}
-	
-	
+
 }
